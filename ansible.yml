@@ -1,0 +1,36 @@
+---
+- name: play for installing jenkins using ansible
+  hosts: CI-Server
+  tasks:
+    - name: installing jdk for jenkins
+      ansible.builtin.dnf:
+        name: java-17-openjdk
+        state: present
+    - name: creating repo for jenkins
+      ansible.builtin.file:
+        path: /etc/yum.repos.d/jenkins.repo
+        state: touch
+        mode: "1755"
+    - name: copying repo for jenkins
+      ansible.builin.geturl:
+        url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
+        dest: /etc/yum.repos.d/jenkins.repo
+    - name: import keys
+      ansible.builtin.shell: rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+    - name: install jenkins
+      ansible.builtin.dnf:
+        name: jenkins
+        state: present
+    - name: start and enable jenkins service
+      ansible.builtin.service:
+        name: jenkins
+        state: started
+        enabled: yes
+    - name: add jenkins in firewall
+      ansible.posix.firewall:
+        service: jenkins
+        state: enabled
+        port: 8080/tcp
+        permanent: yes
+        immediate: yes
+...
