@@ -6,11 +6,6 @@
       ansible.builtin.dnf:
         name: java-17-openjdk
         state: present
-    - name: creating repo for jenkins
-      ansible.builtin.file:
-        path: /etc/yum.repos.d/jenkins.repo
-        state: touch
-        mode: "1755"
     - name: copying repo for jenkins
       ansible.builin.geturl:
         url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
