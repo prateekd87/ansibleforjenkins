@@ -27,7 +27,7 @@
         state: started
         enabled: yes
     - name: add jenkins in firewall
-      ansible.posix.firewall:
+      ansible.posix.firewalld:
         service: jenkins
         state: enabled
         port: 8080/tcp
